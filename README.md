@@ -22,7 +22,7 @@ There are three main methods defining the progress:
  * `tick`
  * `done`
 
-`init` method takes the name of the progress as its first argument and the total number of ticks as the second one. If the second argument is a collection it count its element.
+`init` method takes the name of the progress as its first optional argument and the total number of ticks as the second one. If the second argument is a collection it count its element.
 
 When the third argument is provided, `init` returns it.
 
@@ -99,7 +99,7 @@ You can customize progress bar using `set-progress-bar!` and `config-progress-ba
   :incomplete \-)
 ```
 
-## Using custom progress handler
+## Using custom progress handlers
 
 `clj-proggress` allows you to use your own progress handler by defining `:init`, `:tick` and `:done` hooks:
 
