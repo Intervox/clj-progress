@@ -10,7 +10,24 @@ Flexible progress module for clojure, inspired by [node-progress](https://github
 
 ## Installation
 
-TODO: Deploy to clojars.
+You can install `clj-progress` using [clojars repository](https://clojars.org/intervox/clj-progress).
+
+With Leiningen:
+
+```Clojure
+[intervox/clj-progress "0.1.0"]
+```
+
+With Maven:
+
+```xml
+<dependency>
+  <groupId>intervox</groupId>
+  <artifactId>clj-progress</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
+
 
 ## Usage
 
