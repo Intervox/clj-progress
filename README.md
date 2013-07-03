@@ -15,7 +15,7 @@ You can install `clj-progress` using [clojars repository](https://clojars.org/in
 With Leiningen:
 
 ```Clojure
-[intervox/clj-progress "0.1.0"]
+[intervox/clj-progress "0.1.1"]
 ```
 
 With Maven:
@@ -24,7 +24,7 @@ With Maven:
 <dependency>
   <groupId>intervox</groupId>
   <artifactId>clj-progress</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 </dependency>
 ```
 
