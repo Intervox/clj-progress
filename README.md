@@ -147,7 +147,7 @@ You can customize progress bar using `set-progress-bar!` and `config-progress-ba
 (defn atomic []
   (let [state (atom {:ready false})]
     (with-progress-handler (atom-handler state)
-      (future (progress)))
+      (future (process-all)))
     state))
 
 (defn multi []
