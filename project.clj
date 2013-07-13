@@ -1,5 +1,5 @@
 (defproject intervox/clj-progress "0.1.1"
-  :description "Progress bar for clojure"
+  :description "Flexible clojure progress bar"
   :url "https://github.com/Intervox/clj-progress"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
