@@ -1,7 +1,7 @@
 clj-progress
 =======
 
-Flexible progress module for clojure, inspired by [node-progress](https://github.com/visionmedia/node-progress).
+Flexible clojure progress bar, inspired by [node-progress](https://github.com/visionmedia/node-progress).
 
 ### Main functionality
 
