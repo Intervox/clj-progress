@@ -100,9 +100,11 @@ You can customize progress bar using `set-progress-bar!` and `config-progress-ba
  * `:eta` estimated completion time in seconds
  * `:percent` completion percentage
 
+By default it set to `:header [:bar] :percent :done/:total`.
+
 `config-progress-bar!` allows you to customize the progress bar itself:
 
- * `:width` width of the progress bar
+ * `:width` width of the progress bar (default `50`)
  * `:complete` completion character (default `\=`)
  * `:incomplete` incomplete character (default `\space`)
  * `:current` current tick character (default `\>`)
