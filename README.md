@@ -165,6 +165,6 @@ By default it set to `:header [:bar] :percent :done/:total`.
 
 ## License
 
-Copyright © 2013 Leonid Beschastny
+Copyright © 2013-2014 Leonid Beschastny
 
 Distributed under the Eclipse Public License, the same as Clojure.
