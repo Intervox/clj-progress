@@ -91,8 +91,12 @@ Processing lazy sequences with progress:
 `clj-progress` also provides two extra tick methods:
 
  * `(tick-by n)` - will tick by an amount of `n`
- * `(tick-to x)` - will set current progress value as `x`
- 
+ * `(tick-to x)` - will set current progress value to `x`
+
+The first argument for `tick-by` and `tick-to` is mandatory.
+
+Both `tick-by` and `tick-to` will retirn their second argument if any provided.
+
 ### Examples
 
 ```Clojure
