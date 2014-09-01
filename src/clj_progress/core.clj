@@ -43,6 +43,7 @@
   obj)
 
 (defn tick-to [x & [obj]]
+  {:pre  [(number? x)]}
   (swap! *progress-state* assoc-in [:done] x)
   (handle :tick)
   obj)
