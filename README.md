@@ -18,6 +18,12 @@ With Leiningen:
 [intervox/clj-progress "0.1.2"]
 ```
 
+With Gradle:
+
+```
+compile "intervox:clj-progress:0.1.2"
+```
+
 With Maven:
 
 ```xml
