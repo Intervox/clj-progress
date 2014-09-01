@@ -38,7 +38,7 @@
   obj)
 
 (defn tick-by [n & [obj]]
-  (swap! *progress-state* update-in [:done] (partial + n))
+  (swap! *progress-state* update-in [:done] + n)
   (handle :tick)
   obj)
 
