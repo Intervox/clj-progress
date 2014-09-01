@@ -86,6 +86,33 @@ Processing lazy sequences with progress:
         done))
 ```
 
+## Other ticking methods
+
+`clj-progress` also provides two extra tick methods:
+
+ * `(tick-by n)` - will tick by an amount of `n`
+ * `(tick-to x)` - will set current progress value as `x`
+ 
+### Examples
+
+```Clojure
+(use 'clj-progress.core)
+(use 'clojure.java.io)
+
+(let [input-path "in.txt"]
+  (init (-> (file input-path) .length))
+  (with-open [input (input-stream input-path)
+              output (output-stream "out.txt")]
+    (let [buffer (make-array Byte/TYPE 1024)]
+      (loop []
+        (let [size (.read input buffer)]
+          (when (pos? size)
+            (.write output buffer 0 size)
+            (tick-by size)
+            (recur))))))
+  (done))
+```
+
 ## Customizing progress bar
 
 You can customize progress bar using `set-progress-bar!` and `config-progress-bar!` methods.
