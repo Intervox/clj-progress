@@ -109,10 +109,10 @@ Both `tick-by` and `tick-to` will retirn their second argument if any provided.
 (use 'clj-progress.core)
 (use 'clojure.java.io)
 
-(let [input-path "in.txt"]
+(defn copy-file [input-path output-path]
   (init (-> (file input-path) .length))
-  (with-open [input (input-stream input-path)
-              output (output-stream "out.txt")]
+  (with-open [input  (input-stream  input-path )
+              output (output-stream output-path)]
     (let [buffer (make-array Byte/TYPE 1024)]
       (loop []
         (let [size (.read input buffer)]
