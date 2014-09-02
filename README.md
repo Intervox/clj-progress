@@ -101,7 +101,7 @@ Processing lazy sequences with progress:
 
 The first argument for `tick-by` and `tick-to` is mandatory.
 
-Both `tick-by` and `tick-to` will retirn their second argument if any provided.
+Both `tick-by` and `tick-to` will return their second argument if any provided.
 
 ### Examples
 
