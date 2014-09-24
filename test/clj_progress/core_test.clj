@@ -76,16 +76,16 @@
 
 
 (deftest test-tick
-  (are [h ticks n args]
+  (are [h nticks n args]
     (let [c (atom 0)]
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})]
         (init h n)
-        (dotimes [_ ticks]
+        (dotimes [_ nticks]
           (apply tick args))
-        (let [{:keys [ttl done header]} @*progress-state*]
+        (let [{:keys [ttl done ticks header]} @*progress-state*]
           (and  (= ttl n)
-                (= done @c ticks)
+                (= done @c ticks nticks)
                 (= header h)))))
     "foo" 1 5 [3]
     "bar" 2 9 [0]
@@ -93,16 +93,18 @@
 
 
 (deftest test-tick-by
-  (are [h ticks n args res]
-    (binding [*progress-handler*  {}
-              *progress-state*    (atom {})]
-      (init h n)
-      (doseq [by ticks]
-        (apply tick-by by args))
-      (let [{:keys [ttl done header]} @*progress-state*]
-        (and  (= ttl n)
-              (= done res)
-              (= header h))))
+  (are [h bys n args res]
+    (let [c (atom 0)]
+      (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
+                *progress-state*    (atom {})]
+        (init h n)
+        (doseq [by bys]
+          (apply tick-by by args))
+        (let [{:keys [ttl done ticks header]} @*progress-state*]
+          (and  (= ttl n)
+                (= done res)
+                (= @c ticks)
+                (= header h)))))
     "foo" [ 1         ] 5 [3]  1
     "bar" [ 5 -7      ] 9 [0] -2
     "baz" [ 0  0  0   ] 7 [ ]  0
@@ -112,16 +114,18 @@
 
 
 (deftest test-tick-to
-  (are [h ticks n args res]
-    (binding [*progress-handler*  {}
-              *progress-state*    (atom {})]
-      (init h n)
-      (doseq [to ticks]
-        (apply tick-to to args))
-      (let [{:keys [ttl done header]} @*progress-state*]
-        (and  (= ttl n)
-              (= done res)
-              (= header h))))
+  (are [h tos n args res]
+    (let [c (atom 0)]
+      (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
+                *progress-state*    (atom {})]
+        (init h n)
+        (doseq [to tos]
+          (apply tick-to to args))
+        (let [{:keys [ttl done ticks header]} @*progress-state*]
+          (and  (= ttl n)
+                (= done res)
+                (= @c ticks)
+                (= header h)))))
     "foo" [ 1         ] 5 [3]  1
     "bar" [ 5 -7      ] 9 [0] -7
     "baz" [ 0 -1  1   ] 7 [ ]  1
