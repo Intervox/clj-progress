@@ -7,7 +7,8 @@
     :incomplete \space
     :current    \> })
 
-(defn- get-bar [percent {:keys [width complete incomplete current]}]
+(defn- get-bar
+  [percent {:keys [width complete incomplete current]}]
   {:pre [(every? char? [complete incomplete current])]}
   (let [bar (new StringBuilder)]
     (doseq [i (range width)]
@@ -16,28 +17,50 @@
             :else                     (.append bar incomplete)))
     (.toString bar)))
 
-(defn- sreplace [s k v]
+(defn- sreplace
+  [s k v]
   (string/replace s (str k) (str v)))
 
-(defn- update-progress-bar [fmt options {:keys [header start ttl done]}]
-  (let [percent (-> done (/ ttl) (* 100) int)
-        bar     (get-bar percent (merge *progress-bar-options* options))
+(defn- calc-eta
+  [ttl done elapsed]
+  (-> ttl (/ done) (- 1) (* elapsed) long))
+
+(defn- update-progress-bar
+  [fmt options done? {:keys [header start ttl done ticks]}]
+  (let [strict? (pos? ttl)
+        percent (if strict?
+                    (-> done (/ ttl) (* 100) int)
+                    "?")
+        opts    (merge *progress-bar-options* options)
+        bar     (if strict?
+                    (get-bar percent  opts)
+                    (get-bar -1       opts))
+        wheel   (if done?
+                    "+"
+                    (get  ["-" "\\" "|" "/"]
+                          (mod ticks 4)))
         now     (. System (nanoTime))
         elapsed (-> now (- start) (/ 1000000000))
-        eta     (-> ttl (/ done) (- 1) (* elapsed))]
+        eta     (cond
+                  done?   0
+                  strict? (calc-eta ttl done elapsed)
+                  :else   "?")]
     (print "\r")
     (-> fmt
         (sreplace :header header)
         (sreplace :bar bar)
+        (sreplace :wheel wheel)
         (sreplace :done done)
         (sreplace :total ttl)
         (sreplace :elapsed (long elapsed))
-        (sreplace :eta (long eta))
+        (sreplace :eta eta)
         (sreplace :percent (str percent "%"))
         (str "     ")
         print)
+    (if done? (println))
     (flush)))
 
-(defn progress-bar [fmt & {:as options}]
-  { :tick (partial update-progress-bar fmt options)
-    :done (fn [_] (println))})
+(defn progress-bar
+  [fmt & {:as options}]
+  { :tick (partial update-progress-bar fmt options false)
+    :done (partial update-progress-bar fmt options true )})
