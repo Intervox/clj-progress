@@ -10,6 +10,8 @@
         (=  res
             (apply init args)
             (tick res)
+            (tick-by 2 res)
+            (tick-to 5 res)
             (done res))))
     ["" 1 2       ]
     ["" 1 ""      ]
@@ -90,6 +92,43 @@
     "baz" 7 7 [ ]))
 
 
+(deftest test-tick-by
+  (are [h ticks n args res]
+    (binding [*progress-handler*  {}
+              *progress-state*    (atom {})]
+      (init h n)
+      (doseq [by ticks]
+        (apply tick-by by args))
+      (let [{:keys [ttl done header]} @*progress-state*]
+        (and  (= ttl n)
+              (= done res)
+              (= header h))))
+    "foo" [ 1         ] 5 [3]  1
+    "bar" [ 5 -7      ] 9 [0] -2
+    "baz" [ 0  0  0   ] 7 [ ]  0
+    "foo" [ 1 -1  1 -1] 5 [3]  0
+    "bar" [ 1  2  3  4] 9 [0] 10
+    "baz" [-1 -1 -1 -1] 7 [ ] -4 ))
+
+
+(deftest test-tick-to
+  (are [h ticks n args res]
+    (binding [*progress-handler*  {}
+              *progress-state*    (atom {})]
+      (init h n)
+      (doseq [to ticks]
+        (apply tick-to to args))
+      (let [{:keys [ttl done header]} @*progress-state*]
+        (and  (= ttl n)
+              (= done res)
+              (= header h))))
+    "foo" [ 1         ] 5 [3]  1
+    "bar" [ 5 -7      ] 9 [0] -7
+    "baz" [ 0 -1  1   ] 7 [ ]  1
+    "foo" [ 1 -1  1  1] 5 [3]  1
+    "bar" [ 1  2  3  4] 9 [0]  4 ))
+
+
 (deftest test-done
   (are [args]
     (let [c (atom 0)]
@@ -103,9 +142,36 @@
     [3]
     [ ]))
 
+(deftest test-hooks
+  (let [state   (atom {})
+        log     (atom [])
+        hook    (fn [-name]
+                  #(swap! log conj [-name %]))
+        handler { :init (hook :init)
+                  :tick (hook :tick)
+                  :done (hook :done)}
+        nops    (atom 0)
+        check   (fn [expected-name expected-state]
+                  (swap! nops inc)
+                  (is (= @nops (count @log)))
+                  (let [[-name -state] (last @log)]
+                    (is (= -name  expected-name ))
+                    (is (= -state expected-state))))]
+    (binding [*progress-handler*  handler
+              *progress-state*    state]
+      (init 10)
+      (check :init @state)
+      (tick)
+      (check :tick @state)
+      (tick-by 2)
+      (check :tick @state)
+      (tick-to 9)
+      (check :tick @state)
+      (let [-state @state]
+        (done)
+        (check :done -state)))))
 
 ; TODO:
-;   (deftest test-hooks)
 ;   (deftest test-with-progress)
 ;   (deftest test-with-progress-handler)
 ;   (deftest test-set-progress-handler)
