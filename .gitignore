@@ -8,3 +8,6 @@ pom.xml*
 /checkouts/
 .lein-*
 .nrepl-*
+
+# Code examples for readme
+example.clj
