@@ -1,6 +1,10 @@
+# Lein files
 pom.xml*
-*jar
+*.jar
+*.class
 /lib/
 /classes/
 /target/
-.lein-deps-sum
+/checkouts/
+.lein-*
+.nrepl-*
