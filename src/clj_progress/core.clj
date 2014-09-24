@@ -68,7 +68,7 @@
                   (constantly handler)))
 
 (defmacro with-progress-bar [fmt & body]
-  `(with-progress-handler (progress-bar fmt)
+  `(with-progress-handler (progress-bar ~fmt)
     ~@body))
 
 (defn set-progress-bar! [fmt]
