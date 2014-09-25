@@ -51,7 +51,7 @@
         (sreplace :bar bar)
         (sreplace :wheel wheel)
         (sreplace :done done)
-        (sreplace :total ttl)
+        (sreplace :total (if ttl? ttl "?"))
         (sreplace :elapsed (long elapsed))
         (sreplace :eta eta)
         (sreplace :percent (str percent "%"))
