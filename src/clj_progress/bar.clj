@@ -18,6 +18,16 @@
             :else     (.append bar incomplete)))
     (.toString bar)))
 
+(defn- get-indeterminable-bar
+  [ticks {:keys [width complete incomplete current]}]
+  {:pre [(every? char? [complete incomplete current])]}
+  (let [bar (new StringBuilder)]
+    (doseq [i (range width)]
+      (if (-> i (- ticks) (mod width) (< 3))
+          (.append bar complete)
+          (.append bar incomplete)))
+    (.toString bar)))
+
 (defn- sreplace
   [s k v]
   (string/replace s (str k) (str v)))
@@ -34,8 +44,8 @@
                     "?")
         opts    (merge *progress-bar-options* options)
         bar     (if ttl?
-                    (get-bar percent  opts)
-                    (get-bar -1       opts))
+                    (get-bar percent opts)
+                    (get-indeterminable-bar ticks opts))
         wheel   (if done?
                     "+"
                     (get  ["-" "\\" "|" "/"]
