@@ -10,11 +10,12 @@
 (defn- get-bar
   [percent {:keys [width complete incomplete current]}]
   {:pre [(every? char? [complete incomplete current])]}
-  (let [bar (new StringBuilder)]
+  (let [bar (new StringBuilder)
+        dam (int (/ percent 2))]
     (doseq [i (range width)]
-      (cond (< i (int (/ percent 2))) (.append bar complete)
-            (= i (int (/ percent 2))) (.append bar current)
-            :else                     (.append bar incomplete)))
+      (cond (< i dam) (.append bar complete)
+            (= i dam) (.append bar current)
+            :else     (.append bar incomplete)))
     (.toString bar)))
 
 (defn- sreplace
