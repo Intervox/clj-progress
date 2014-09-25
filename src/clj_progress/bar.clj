@@ -27,12 +27,12 @@
 
 (defn- update-progress-bar
   [fmt options done? {:keys [header start ttl done ticks]}]
-  (let [strict? (pos? ttl)
-        percent (if strict?
+  (let [ttl?    (pos? ttl)
+        percent (if ttl?
                     (-> done (/ ttl) (* 100) int)
                     "?")
         opts    (merge *progress-bar-options* options)
-        bar     (if strict?
+        bar     (if ttl?
                     (get-bar percent  opts)
                     (get-bar -1       opts))
         wheel   (if done?
@@ -42,9 +42,9 @@
         now     (. System (nanoTime))
         elapsed (-> now (- start) (/ 1000000000))
         eta     (cond
-                  done?   0
-                  strict? (calc-eta ttl done elapsed)
-                  :else   "?")]
+                  done? 0
+                  ttl?  (calc-eta ttl done elapsed)
+                  :else "?")]
     (print "\r")
     (-> fmt
         (sreplace :header header)
