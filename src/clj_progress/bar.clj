@@ -11,7 +11,7 @@
   [percent {:keys [width complete incomplete current]}]
   {:pre [(every? char? [complete incomplete current])]}
   (let [bar (new StringBuilder)
-        dam (int (/ percent 2))]
+        dam (-> percent (* width) (/ 100) int)]
     (doseq [i (range width)]
       (cond (< i dam) (.append bar complete)
             (= i dam) (.append bar current)
