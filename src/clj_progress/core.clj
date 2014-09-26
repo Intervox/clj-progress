@@ -33,6 +33,11 @@
   ([header ttl obj & args]
     (init* header ttl obj)))
 
+(defn re-init
+  [ttl]
+  (swap! *progress-state* update-in [:ttl] ttl)
+  (handle :tick))
+
 (defn tick [& [obj]]
   (swap! *progress-state* update-in [:done] inc)
   (swap! *progress-state* update-in [:ticks] inc)
