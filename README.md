@@ -15,13 +15,13 @@ You can install `clj-progress` using [clojars repository](https://clojars.org/in
 With Leiningen:
 
 ```Clojure
-[intervox/clj-progress "0.1.2"]
+[intervox/clj-progress "0.1.3"]
 ```
 
 With Gradle:
 
 ```
-compile "intervox:clj-progress:0.1.2"
+compile "intervox:clj-progress:0.1.3"
 ```
 
 With Maven:
@@ -30,7 +30,7 @@ With Maven:
 <dependency>
   <groupId>intervox</groupId>
   <artifactId>clj-progress</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
 </dependency>
 ```
 
