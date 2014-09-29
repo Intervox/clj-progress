@@ -43,9 +43,10 @@
                     (-> done (/ ttl) (* 100) int)
                     "?")
         opts    (merge *progress-bar-options* options)
-        bar     (if ttl?
-                    (get-bar percent opts)
-                    (get-indeterminable-bar ticks opts))
+        bar     (cond
+                  done? (get-bar 100 opts)
+                  ttl?  (get-bar percent opts)
+                  :else (get-indeterminable-bar ticks opts))
         wheel   (if done?
                     "+"
                     (get  ["-" "\\" "|" "/"]
