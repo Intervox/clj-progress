@@ -1,3 +1,8 @@
+[![Build Status][travis_icon]][travis]
+
+  [travis_icon]: https://travis-ci.org/Intervox/clj-progress.svg
+  [travis]: https://travis-ci.org/Intervox/clj-progress
+
 clj-progress
 =======
 
