@@ -6,7 +6,9 @@
 clj-progress
 =======
 
-Flexible clojure progress bar, inspired by [node-progress](https://github.com/visionmedia/node-progress).
+Flexible clojure progress bar, inspired by [node-progress].
+
+  [node-progress]: https://github.com/visionmedia/node-progress
 
 ### Main functionality
 
@@ -15,7 +17,9 @@ Flexible clojure progress bar, inspired by [node-progress](https://github.com/vi
 
 ## Installation
 
-You can install `clj-progress` using [clojars repository](https://clojars.org/intervox/clj-progress).
+You can install `clj-progress` using [clojars repository][repo].
+
+  [repo]: https://clojars.org/intervox/clj-progress
 
 With Leiningen:
 
