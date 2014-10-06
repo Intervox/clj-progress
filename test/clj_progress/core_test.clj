@@ -1,6 +1,6 @@
 (ns clj-progress.core-test
-  (:use clojure.test
-        clj-progress.core))
+  (:use (clj-progress core bar)
+        clojure.test))
 
 
 (deftest test-returned-value
@@ -171,10 +171,63 @@
         (done)
         (check :done -state)))))
 
-; TODO:
-;   (deftest test-with-progress)
-;   (deftest test-with-progress-handler)
-;   (deftest test-set-progress-handler)
-;   (deftest test-with-progress-bar)
-;   (deftest test-set-progress-bar)
-;   (deftest test-config-progress-bar)
+(deftest test-with-progress
+  (let [mock  { :foo :bar }
+        state (atom mock)]
+    (binding [*progress-handler*  {}
+              *progress-state*    state]
+      (with-progress
+        (is (not= *progress-state* state))
+        (is (= @*progress-state* {}))
+        (init 10))
+      (is (= *progress-state* state))
+      (is (= @state mock)))))
+
+(deftest test-with-progress-handler
+  (let [h1  { :foo :bar }
+        h2  { :foo :baz }]
+    (binding [*progress-handler* h1]
+      (with-progress-handler h2
+        (is (= *progress-handler* h2)))
+      (is (= *progress-handler* h1)))))
+
+(deftest test-set-progress-handler
+  (let [h1    { :foo :bar }
+        h2    { :foo :baz }
+        curr  *progress-handler*]
+    (binding [*progress-handler* h1]
+      (set-progress-handler! h2)
+      (is (= *progress-handler* h1)))
+    (is (= *progress-handler* h2))
+    (set-progress-handler! curr)
+    (is (= *progress-handler* curr))))
+
+(deftest test-with-progress-bar
+  (let [h1  { :foo :bar }
+        h2  { :foo :baz }]
+    (with-redefs-fn { #'progress-bar (constantly h2) }
+      #(binding [*progress-handler* h1]
+        (with-progress-bar "fmt"
+          (is (= *progress-handler* h2)))
+        (is (= *progress-handler* h1))))))
+
+(deftest test-set-progress-bar
+  (let [h1    { :foo :bar }
+        h2    { :foo :baz }
+        curr  *progress-handler*]
+    (with-redefs-fn { #'progress-bar (constantly h2) }
+      #(binding [*progress-handler* h1]
+        (set-progress-bar! "fmt")
+        (is (= *progress-handler* h1))))
+    (is (= *progress-handler* h2))
+    (set-progress-handler! curr)))
+
+(deftest test-config-progress-bar
+  (let [opts  *progress-bar-options*]
+    (binding [*progress-bar-options* {}]
+      (config-progress-bar! :foo :bar :baz 42)
+      (is (= *progress-bar-options* {})))
+    (is (=  *progress-bar-options*
+            (assoc opts :foo :bar :baz 42)))
+    (alter-var-root #'*progress-bar-options*
+                    (constantly opts))))
