@@ -205,6 +205,10 @@ By default it set to `:header [:bar] :percent :done/:total`.
     (println "All done!")))
 ```
 
+## [Changelog][history]
+
+  [history]: /blob/master/README.md
+
 ## License
 
 Copyright © 2013-2014 Leonid Beschastny
