@@ -211,7 +211,7 @@ By default it set to `:header [:bar] :percent :done/:total`.
 
 ## [Changelog][history]
 
-  [history]: /blob/master/README.md
+  [history]: History.md
 
 ## License
 
