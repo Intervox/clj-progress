@@ -1,3 +1,11 @@
+0.1.4 / 2014-10-07
+==================
+
+  * Added indeterminable progress reporting [#3]
+
+
+  [#3]: https://github.com/Intervox/node-webp/issues/3
+
 0.1.3 / 2014-09-24
 ==================
 
