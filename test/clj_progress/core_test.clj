@@ -142,6 +142,7 @@
     [3]
     [ ]))
 
+
 (deftest test-hooks
   (let [state   (atom {})
         log     (atom [])
@@ -171,6 +172,7 @@
         (done)
         (check :done -state)))))
 
+
 (deftest test-with-progress
   (let [mock  { :foo :bar }
         state (atom mock)]
@@ -183,6 +185,7 @@
       (is (= *progress-state* state))
       (is (= @state mock)))))
 
+
 (deftest test-with-progress-handler
   (let [h1  { :foo :bar }
         h2  { :foo :baz }]
@@ -190,6 +193,7 @@
       (with-progress-handler h2
         (is (= *progress-handler* h2)))
       (is (= *progress-handler* h1)))))
+
 
 (deftest test-set-progress-handler
   (let [h1    { :foo :bar }
@@ -202,6 +206,7 @@
     (set-progress-handler! curr)
     (is (= *progress-handler* curr))))
 
+
 (deftest test-with-progress-bar
   (let [h1  { :foo :bar }
         h2  { :foo :baz }]
@@ -210,6 +215,7 @@
         (with-progress-bar "fmt"
           (is (= *progress-handler* h2)))
         (is (= *progress-handler* h1))))))
+
 
 (deftest test-set-progress-bar
   (let [h1    { :foo :bar }
@@ -221,6 +227,7 @@
         (is (= *progress-handler* h1))))
     (is (= *progress-handler* h2))
     (set-progress-handler! curr)))
+
 
 (deftest test-config-progress-bar
   (let [opts  *progress-bar-options*]
