@@ -16,6 +16,7 @@
     :start  (. System (nanoTime))
     :ttl    ttl
     :done   0
+    :ticks  0
     :header header)
   (handle :init)
   obj)
@@ -32,19 +33,27 @@
   ([header ttl obj & args]
     (init* header ttl obj)))
 
+(defn re-init
+  [ttl]
+  (swap! *progress-state* update-in [:ttl] ttl)
+  (handle :tick))
+
 (defn tick [& [obj]]
   (swap! *progress-state* update-in [:done] inc)
+  (swap! *progress-state* update-in [:ticks] inc)
   (handle :tick)
   obj)
 
 (defn tick-by [n & [obj]]
   (swap! *progress-state* update-in [:done] + n)
+  (swap! *progress-state* update-in [:ticks] inc)
   (handle :tick)
   obj)
 
 (defn tick-to [x & [obj]]
   {:pre  [(number? x)]}
   (swap! *progress-state* assoc-in [:done] x)
+  (swap! *progress-state* update-in [:ticks] inc)
   (handle :tick)
   obj)
 

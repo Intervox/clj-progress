@@ -130,14 +130,24 @@ Both `tick-by` and `tick-to` will return their second argument if any provided.
   (done))
 ```
 
+## Hot re-initialization
+
+Sometimes an exact number of ticks is unknown when at progress bar initialization time.
+To adjust total number of ticks without reseting the whole progress bar you may use `re-init` function:
+
+```Clojure
+(re-init 60)
+```
+
 ## Customizing progress bar
 
 You can customize progress bar using `set-progress-bar!` and `config-progress-bar!` methods.
 
-`set-progress-bar!` takes the format string as its single argument. You can use the following set of tokens to create your own proress bar:
+`set-progress-bar!` takes the format string as its single argument. You can use the following set of tokens to create your own progress bar:
 
  * `:header` name of the progress
  * `:bar` the progress bar itself
+ * `:wheel` rotating progress indicator
  * `:done` current tick number
  * `:total` total number of ticks
  * `:elapsed` elapsed time in seconds
@@ -161,6 +171,31 @@ By default it set to `:header [:bar] :percent :done/:total`.
   :current    \#
   :incomplete \-)
 ```
+
+## Indeterminable progress bar
+
+To use `clj-progress` with unknown
+
+When total number of ticks is unknown it's possible to start indeterminable progress
+by initializing it with any non-positive value:
+
+```Clojure
+(init "downloading" -1)
+```
+
+or
+
+```Clojure
+(init 0)
+```
+
+When progress state is indeterminable, following `progress-bar` tokens will be replaced with `?` symbol:
+
+ * `:total`
+ * `:eta`
+ * `:percent`
+
+Indeterminable state also change `:bar` animation.
 
 ## Using custom progress handlers
 
