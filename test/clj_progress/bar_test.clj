@@ -67,7 +67,7 @@
     "bar [\\] 50% 99s"
 
     ":header"   [ "bar" 99  -1  5   2 ] "bar"
-    "[:bar]"    [ "bar" 99  -1  5   2 ] "[ ===  ]"
+    "[:bar]"    [ "bar" 99  -1  5   2 ] "[  === ]"
     ":wheel"    [ "bar" 99  -1  5   2 ] "\\"
     ":done"     [ "bar" 99  -1  5   2 ] "5"
     ":total"    [ "bar" 99  -1  5   2 ] "?"
@@ -77,8 +77,8 @@
 
     "> [:bar] :done/:total :elapseds"
     [ "bar" 99  -1  5   2 ]
-    "> [ ===  ] 5/? 99s"
+    "> [  === ] 5/? 99s"
 
     ":header [:wheel] :percent :etas"
-    [ "bar" 99  10  5   2 ]
+    [ "bar" 99  -1  5   2 ]
     "bar [\\] ?% ?s" ))
