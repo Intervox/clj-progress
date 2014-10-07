@@ -81,6 +81,6 @@
         args  [ "bar" 99 -1 5 2 ]]
     (let [{:keys [tick done]} (progress-bar fmt :width 6)]
       (is (=  (-> args get-state tick with-out-str s/trim)
-              "> [  === ] ?% 2/? 99s"))
+              "bar [\\] ?% 99s"))
       (is (=  (-> args get-state done with-out-str s/trim)
-              "> [======] ?% 2/? 99s")))))
+              "bar [+] ?% 99s")))))
