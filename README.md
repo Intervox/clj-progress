@@ -1,8 +1,9 @@
-clj-progress [![Build Status][travis_icon]][travis]
-=======
+# clj-progress [![Build Status][travis_badge]][travis] [![Dependency Status][versioneye_badge]][versioneye]
 
-  [travis_icon]: https://travis-ci.org/Intervox/clj-progress.svg
+  [travis_badge]: https://travis-ci.org/Intervox/clj-progress.svg
+  [versioneye_badge]: http://www.versioneye.com/clojure/intervox:clj-progress/badge.svg
   [travis]: https://travis-ci.org/Intervox/clj-progress
+  [versioneye]: http://www.versioneye.com/clojure/intervox:clj-progress
 
 Flexible clojure progress bar, inspired by [node-progress].
 
