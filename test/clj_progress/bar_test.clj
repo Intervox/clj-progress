@@ -1,6 +1,6 @@
 (ns clj-progress.bar-test
   (:require [clojure.string :as s])
-  (:use clj-progress.bar
+  (:use (clj-progress core bar)
         clojure.test))
 
 (defn get-state
@@ -84,3 +84,20 @@
               "bar [\\] ?% 99s"))
       (is (=  (-> args get-state done with-out-str s/trim)
               "bar [+] ?% 99s")))))
+
+(defn re-count
+  [re s]
+  (-> (re-pattern re)
+      (re-seq s)
+      count))
+
+(deftest test-concurrent-progress
+  (let [fmt "Lorem ipsum"
+        n   5000
+        s   (with-out-str
+              (with-progress-bar fmt
+                (init n)
+                (dorun (pmap tick (range n)))
+                (done)))]
+    (is (<= n (re-count (str "\r" fmt) s)))
+    (is (=  0 (re-count "\r\r" s)))))
