@@ -29,8 +29,11 @@
     (.toString bar)))
 
 (defn- sreplace
-  [s k v]
-  (string/replace s (str k) (str v)))
+  [s & {:as pairs}]
+  (reduce (fn [s [k v]]
+            (string/replace s (str k) (str v)))
+          s
+          pairs))
 
 (defn- calc-eta
   [ttl done elapsed]
@@ -41,32 +44,27 @@
   (let [ttl?    (pos? ttl)
         percent (if ttl? (-> done (/ ttl) (* 100)))
         opts    (merge *progress-bar-options* options)
-        bar     (cond
-                  done? (get-bar 100 opts)
-                  ttl?  (get-bar percent opts)
-                  :else (get-indeterminable-bar ticks opts))
-        wheel   (if done?
-                    "+"
-                    (get  ["/" "-" "\\" "|"]
-                          (mod ticks 4)))
         now     (. System (nanoTime))
-        elapsed (-> now (- start) (/ 1000000000))
-        eta     (cond
-                  done? 0
-                  ttl?  (calc-eta ttl done elapsed)
-                  :else "?")]
-    (print "\r")
-    (-> fmt
-        (sreplace :header header)
-        (sreplace :bar bar)
-        (sreplace :wheel wheel)
-        (sreplace :done done)
-        (sreplace :total (if ttl? ttl "?"))
-        (sreplace :elapsed (long elapsed))
-        (sreplace :eta eta)
-        (sreplace :percent (str (if ttl? (int percent) "?") "%"))
-        (str "     ")
-        print)
+        elapsed (-> now (- start) (/ 1000000000))]
+    (print
+      (sreplace (str "\r" fmt "     ")
+        :header   header
+        :bar      (cond
+                    done? (get-bar 100 opts)
+                    ttl?  (get-bar percent opts)
+                    :else (get-indeterminable-bar ticks opts))
+        :wheel    (if done?
+                      "+"
+                      (get  ["/" "-" "\\" "|"]
+                            (mod ticks 4)))
+        :done     done
+        :total    (if ttl? ttl "?")
+        :elapsed  (long elapsed)
+        :eta      (cond
+                    done? 0
+                    ttl?  (calc-eta ttl done elapsed)
+                    :else "?")
+        :percent  (str (if ttl? (int percent) "?") "%")))
     (if done? (println))
     (flush)))
 
