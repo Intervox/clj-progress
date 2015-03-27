@@ -81,8 +81,9 @@
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})]
         (init h n)
-        (dotimes [_ nticks]
-          (apply tick args))
+        (with-throttle 0
+          (dotimes [_ nticks]
+            (apply tick args)))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
           (and  (= ttl n)
                 (= done @c ticks nticks)
@@ -98,8 +99,9 @@
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})]
         (init h n)
-        (doseq [by bys]
-          (apply tick-by by args))
+        (with-throttle 0
+          (doseq [by bys]
+            (apply tick-by by args)))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
           (and  (= ttl n)
                 (= done res)
@@ -119,8 +121,9 @@
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})]
         (init h n)
-        (doseq [to tos]
-          (apply tick-to to args))
+        (with-throttle 0
+          (doseq [to tos]
+            (apply tick-to to args)))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
           (and  (= ttl n)
                 (= done res)
@@ -164,14 +167,15 @@
                     (is (= -state expected-state))))]
     (binding [*progress-handler*  handler
               *progress-state*    state]
-      (init 10)
-      (check :init @state)
-      (tick)
-      (check :tick @state)
-      (tick-by 2)
-      (check :tick @state)
-      (tick-to 9)
-      (check :tick @state)
+      (with-throttle 0
+        (init 10)
+        (check :init @state)
+        (tick)
+        (check :tick @state)
+        (tick-by 2)
+        (check :tick @state)
+        (tick-to 9)
+        (check :tick @state))
       (let [-state @state]
         (done)
         (check :done -state)))))
