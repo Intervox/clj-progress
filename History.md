@@ -1,3 +1,11 @@
+0.2.0 / 2015-03-27
+==================
+
+  * Added throttling [#5]
+
+
+  [#5]: https://github.com/Intervox/clj-progress/pull/5
+
 0.1.6 / 2014-12-01
 ==================
 
