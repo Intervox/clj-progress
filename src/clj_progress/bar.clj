@@ -40,12 +40,11 @@
   (-> ttl (/ done) (- 1) (* elapsed) long))
 
 (defn- update-progress-bar
-  [fmt options done? {:keys [header start ttl done ticks]}]
+  [fmt options done? {:keys [header start update ttl done ticks]}]
   (let [ttl?    (pos? ttl)
         percent (if ttl? (-> done (/ ttl) (* 100)))
         opts    (merge *progress-bar-options* options)
-        now     (. System (nanoTime))
-        elapsed (-> now (- start) (/ 1000000000))]
+        elapsed (-> update (- start) (/ 1000000000))]
     (print
       (sreplace (str "\r" fmt "     ")
         :header   header
