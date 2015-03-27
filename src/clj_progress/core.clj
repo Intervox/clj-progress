@@ -98,7 +98,7 @@
   (alter-var-root #'*progress-bar-options* merge options))
 
 (defmacro with-throttle [wait & body]
-  `(binding [*throttle* wait]
+  `(binding [*throttle* ~wait]
      ~@body))
 
 (defn set-throttle! [wait]
