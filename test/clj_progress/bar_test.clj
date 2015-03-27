@@ -5,10 +5,10 @@
 
 (defn get-state
   [[header elapsed ttl done ticks]]
-  (let [now   (. System (nanoTime))
-        start (- now (* elapsed 1000000000))]
-    (zipmap [:header :start :ttl :done :ticks ]
-            [ header  start  ttl  done  ticks ])))
+  (let [update  (System/nanoTime)
+        start   (- update (* elapsed 1000000000))]
+    (zipmap [:header :start :ttl :done :ticks :update ]
+            [ header  start  ttl  done  ticks  update ])))
 
 (deftest test-progress-bar
   (are [fmt args res]
@@ -96,8 +96,9 @@
         n   5000
         s   (with-out-str
               (with-progress-bar fmt
-                (init n)
-                (dorun (pmap tick (range n)))
-                (done)))]
+                (with-throttle 0
+                  (init n)
+                  (dorun (pmap tick (range n)))
+                  (done))))]
     (is (<= n (re-count (str "\r" fmt) s)))
     (is (=  0 (re-count "\r\r" s)))))
