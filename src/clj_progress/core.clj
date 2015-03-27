@@ -6,7 +6,7 @@
 (def ^:dynamic *progress-handler*
   (progress-bar ":header [:bar] :percent :done/:total"))
 
-(def ^:dynamic *throttle* 1000)
+(def ^:dynamic *throttle* 20)
 
 (defn- handle [action]
   (if-let [f (get *progress-handler* action)]
