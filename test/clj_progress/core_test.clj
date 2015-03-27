@@ -81,8 +81,9 @@
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})]
         (init h n)
-        (dotimes [_ nticks]
-          (apply tick args))
+        (with-throttle 0
+          (dotimes [_ nticks]
+            (apply tick args)))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
           (and  (= ttl n)
                 (= done @c ticks nticks)
@@ -92,14 +93,32 @@
     "baz" 7 7 [ ]))
 
 
+(deftest test-throttle
+  (are [nticks throttle sleep n]
+    (let [c (atom 0)]
+      (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
+                *progress-state*    (atom {})
+                *throttle*          throttle]
+        (init n)
+        (dotimes [_ nticks]
+          (Thread/sleep sleep)
+          (tick))
+        (let [{:keys [ttl done ticks header]} @*progress-state*]
+          (is (= @c ticks n)))))
+    100   200 20  10
+    100   20  5   25
+    1000  200 5   25 ))
+
+
 (deftest test-tick-by
   (are [h bys n args res]
     (let [c (atom 0)]
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})]
         (init h n)
-        (doseq [by bys]
-          (apply tick-by by args))
+        (with-throttle 0
+          (doseq [by bys]
+            (apply tick-by by args)))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
           (and  (= ttl n)
                 (= done res)
@@ -119,8 +138,9 @@
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})]
         (init h n)
-        (doseq [to tos]
-          (apply tick-to to args))
+        (with-throttle 0
+          (doseq [to tos]
+            (apply tick-to to args)))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
           (and  (= ttl n)
                 (= done res)
@@ -164,14 +184,15 @@
                     (is (= -state expected-state))))]
     (binding [*progress-handler*  handler
               *progress-state*    state]
-      (init 10)
-      (check :init @state)
-      (tick)
-      (check :tick @state)
-      (tick-by 2)
-      (check :tick @state)
-      (tick-to 9)
-      (check :tick @state)
+      (with-throttle 0
+        (init 10)
+        (check :init @state)
+        (tick)
+        (check :tick @state)
+        (tick-by 2)
+        (check :tick @state)
+        (tick-to 9)
+        (check :tick @state))
       (let [-state @state]
         (done)
         (check :done -state)))))
@@ -242,3 +263,23 @@
             (assoc opts :foo :bar :baz 42)))
     (alter-var-root #'*progress-bar-options*
                     (constantly opts))))
+
+
+(deftest test-with-throttle
+  (let [t1 666 t2 999]
+    (binding [*throttle* t1]
+      (with-throttle t2
+        (is (= *throttle* t2)))
+      (is (= *throttle* t1)))))
+
+
+(deftest test-set-throttle
+  (let [t1    666
+        t2    999
+        curr  *throttle*]
+    (binding [*throttle* t1]
+      (set-throttle! t2)
+      (is (= *throttle* t1)))
+    (is (= *throttle* t2))
+    (set-throttle! curr)
+    (is (= *throttle* curr))))
