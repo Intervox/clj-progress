@@ -14,7 +14,7 @@
   * Added indeterminable progress reporting [#3]
 
 
-  [#3]: https://github.com/Intervox/node-webp/issues/3
+  [#3]: https://github.com/Intervox/clj-progress/issues/3
 
 0.1.3 / 2014-09-24
 ==================
@@ -27,7 +27,7 @@
   * Added tick-by and tick-to methods [#1]
 
 
-  [#1]: https://github.com/Intervox/node-webp/issues/1
+  [#1]: https://github.com/Intervox/clj-progress/pull/1
 
 0.1.1 / 2013-06-03
 ==================
