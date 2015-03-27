@@ -200,7 +200,7 @@ Indeterminable state also change `:bar` animation.
 
 ## Throttling
 
-By default, `clj-progress` limits the frequency of progress bar updates. Default configuretion allows at most one update per every `20` milliseconds (maximum `50` updated per second).
+`clj-progress` limits the frequency of progress bar updates. Default configuration allows at most one update per every `20` milliseconds (maximum `50` updated per second).
 
 `clj-progress` will execute `:tick` progress handler (reprint progress bar, or invoke user-defined handler) as soon as you'll call any `tick` method for the first time.
 If you'll call it again any number of times during the wait period, `:tick` progress handler will not be executed, though progress status will be tracked internally.
