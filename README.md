@@ -142,7 +142,7 @@ To adjust total number of ticks without reseting the whole progress bar you may 
 
 ## Customizing progress bar
 
-You can customize progress bar using `set-progress-bar!` and `config-progress-bar!` methods.
+You can customize progress bar using `set-progress-bar!` and `config-progress-bar!` methods and `with-progress-bar` macro.
 
 `set-progress-bar!` takes the format string as its single argument. You can use the following set of tokens to create your own progress bar:
 
@@ -156,6 +156,8 @@ You can customize progress bar using `set-progress-bar!` and `config-progress-ba
  * `:percent` completion percentage
 
 By default it set to `:header [:bar] :percent :done/:total`.
+
+`with-progress-bar` macro allows you set progress bar format string only for some part of your code, without changing global settings.
 
 `config-progress-bar!` allows you to customize the progress bar itself:
 
@@ -171,6 +173,9 @@ By default it set to `:header [:bar] :percent :done/:total`.
   :complete   \#
   :current    \#
   :incomplete \-)
+
+(with-progress-bar "[:wheel] :done/:total :header"
+  (do-something))
 ```
 
 ## Indeterminable progress bar
@@ -200,7 +205,19 @@ Indeterminable state also change `:bar` animation.
 
 ## Using custom progress handlers
 
-`clj-proggress` allows you to use your own progress handler by defining `:init`, `:tick` and `:done` hooks:
+`clj-proggress` allows you to use your own progress handler by defining `:init`, `:tick` and `:done` hooks with `set-progress-handler!` method or `with-progress-handler` macro:
+
+```Clojure
+(set-progress-handler!
+  { :init init-handler
+    :tick tick-handler
+    :done done-handler})
+
+(with-progress-handler my-handler
+  (do-something))
+```
+
+### Example
 
 ```Clojure
 (use 'clj-progress.core)
@@ -241,6 +258,15 @@ Indeterminable state also change `:bar` animation.
       (println "==========")
       (Thread/sleep 1000))
     (println "All done!")))
+```
+
+## Handling progress state
+
+`clj-progress` keeps a global state to track your progress status. Sometimes it may be useful to create a local execution state (for example, if you want to execute several tasks in parallel with custom progress handler). You could do it using `with-progress` macro:
+
+```Clojure
+(with-progress
+  (do-something))
 ```
 
 ## [Changelog][history]
