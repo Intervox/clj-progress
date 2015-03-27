@@ -6,18 +6,22 @@
 (def ^:dynamic *progress-handler*
   (progress-bar ":header [:bar] :percent :done/:total"))
 
+(def ^:dynamic *throttle* 1000)
+
 (defn- handle [action]
   (if-let [f (get *progress-handler* action)]
     (f @*progress-state*)))
 
 (defn- init* [header ttl & [obj]]
   {:pre [(number? ttl)]}
-  (swap! *progress-state* assoc
-    :start  (. System (nanoTime))
-    :ttl    ttl
-    :done   0
-    :ticks  0
-    :header header)
+  (let [now (System/nanoTime)]
+    (swap! *progress-state* assoc
+      :start  now
+      :update now
+      :ttl    ttl
+      :done   0
+      :ticks  0
+      :header header))
   (handle :init)
   obj)
 
@@ -38,24 +42,31 @@
   (swap! *progress-state* update-in [:ttl] ttl)
   (handle :tick))
 
+(defn- tick* [obj]
+  (let [wait  (if (pos? *throttle*)
+                  (* *throttle* 1000000)
+                  -1)
+        prev  (get @*progress-state* :update)
+        now   (System/nanoTime)]
+    (when (> (- now prev) wait)
+      (doto *progress-state*
+        (swap! update-in  [:ticks ] inc)
+        (swap! assoc-in   [:update] now))
+      (handle :tick)))
+  obj)
+
 (defn tick [& [obj]]
   (swap! *progress-state* update-in [:done] inc)
-  (swap! *progress-state* update-in [:ticks] inc)
-  (handle :tick)
-  obj)
+  (tick* obj))
 
 (defn tick-by [n & [obj]]
   (swap! *progress-state* update-in [:done] + n)
-  (swap! *progress-state* update-in [:ticks] inc)
-  (handle :tick)
-  obj)
+  (tick* obj))
 
 (defn tick-to [x & [obj]]
   {:pre  [(number? x)]}
   (swap! *progress-state* assoc-in [:done] x)
-  (swap! *progress-state* update-in [:ticks] inc)
-  (handle :tick)
-  obj)
+  (tick* obj))
 
 (defn done [& [obj]]
   (handle :done)
