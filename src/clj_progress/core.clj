@@ -96,3 +96,11 @@
 
 (defn config-progress-bar! [& {:as options}]
   (alter-var-root #'*progress-bar-options* merge options))
+
+(defmacro with-throttle [wait & body]
+  `(binding [*throttle* wait]
+     ~@body))
+
+(defn set-throttle! [wait]
+  (alter-var-root #'*throttle*
+                  (constantly wait)))
