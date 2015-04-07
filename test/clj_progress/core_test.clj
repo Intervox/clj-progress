@@ -104,7 +104,7 @@
           (Thread/sleep sleep)
           (tick))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
-          (is (= @c ticks n)))))
+          (= @c ticks n))))
     100   200 20  10
     100   20  5   25
     1000  200 5   25 ))
