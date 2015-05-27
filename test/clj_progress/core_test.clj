@@ -172,6 +172,26 @@
     [ ]))
 
 
+(deftest test-lazy
+  (let [c1 (atom 0)
+        c2 (atom 0)
+        c3 (atom 0)]
+    (binding [*progress-handler*  { :init (fn [_] (swap! c1 inc))
+                                    :tick (fn [_] (swap! c2 inc))
+                                    :done (fn [_] (swap! c3 inc)) }
+              *progress-state*    (atom {})]
+      (with-throttle 0
+        (->> (range 50)
+             (init "Processing")
+             (map tick)
+             done
+             dorun))
+      (is (= @*progress-state* {}))
+      (is (= @c1 1 ))
+      (is (= @c2 50))
+      (is (= @c3 1 )))))
+
+
 (deftest test-hooks
   (let [state   (atom {})
         log     (atom [])
