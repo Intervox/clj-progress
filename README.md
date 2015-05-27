@@ -100,6 +100,18 @@ Processing lazy sequences with progress:
         done))
 ```
 
+Note that `done` should only be called after the lazy sequence is evaluated.
+It resets the state of the progress bar, making later `tick` calls illegal.
+Evaluate lazy sequences before calling `done`:
+
+```Clojure
+(do
+  (doall (->> (range 1 50)
+              (init "Processing")
+              (map (comp tick process-item))))
+  (done))
+```
+
 ## Other ticking methods
 
 `clj-progress` also provides two extra tick methods:
