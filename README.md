@@ -105,11 +105,11 @@ It resets the state of the progress bar, making later `tick` calls illegal.
 Evaluate lazy sequences before calling `done`:
 
 ```Clojure
-(do
-  (doall (->> (range 1 50)
-              (init "Processing")
-              (map (comp tick process-item))))
-  (done))
+(->> (range 1 50)
+     (init "Processing")
+     (map (comp tick process-item))
+     doall
+     done)
 ```
 
 ## Other ticking methods
