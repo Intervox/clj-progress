@@ -76,7 +76,7 @@
 (defn done [& [obj]]
   (if (and (instance? clojure.lang.LazySeq obj)
            (not (realized? obj)))
-      (lazy-cat obj (done*))
+      (lazy-cat obj (done* nil))
       (done* obj)))
 
 (defmacro with-progress [& body]
