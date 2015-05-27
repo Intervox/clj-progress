@@ -1,9 +1,12 @@
-# clj-progress [![Build Status][travis_badge]][travis] [![Dependency Status][versioneye_badge]][versioneye]
+# clj-progress [![Clojars Repository][repo_badge]][repo] [![Linux Build Status][travis_badge]][travis] [![Windows Build Status][appveyor_badge]][appveyor] [![Dependency Status][versioneye_badge]][versioneye]
 
-  [travis_badge]: https://travis-ci.org/Intervox/clj-progress.svg
+  [repo_badge]: https://img.shields.io/clojars/v/intervox/clj-progress.svg
+  [travis_badge]: https://img.shields.io/travis/Intervox/clj-progress.svg?label=linux%20build
+  [appveyor_badge]: https://img.shields.io/appveyor/ci/Intervox/clj-progress.svg?label=windows%20build
   [versioneye_badge]: http://www.versioneye.com/clojure/intervox:clj-progress/badge.svg
   [travis]: https://travis-ci.org/Intervox/clj-progress
   [versioneye]: http://www.versioneye.com/clojure/intervox:clj-progress
+  [appveyor]: https://ci.appveyor.com/project/lbeschastny/clj-progress
 
 Flexible clojure progress bar, inspired by [node-progress].
 
