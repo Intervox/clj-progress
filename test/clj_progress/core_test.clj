@@ -94,8 +94,12 @@
 
 
 (deftest test-throttle
-  (are [nticks throttle sleep n]
-    (let [c (atom 0)]
+  (are [nticks throttle sleep]
+    (let [c   (atom 0)
+          n   (-> nticks
+                  (* sleep)
+                  (/ throttle)
+                  int)]
       (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
                 *progress-state*    (atom {})
                 *throttle*          throttle]
@@ -104,10 +108,11 @@
           (Thread/sleep sleep)
           (tick))
         (let [{:keys [ttl done ticks header]} @*progress-state*]
-          (= @c ticks n))))
-    100   200 20  10
-    100   20  5   25
-    1000  200 5   25 ))
+          (and  (= @c ticks)
+                (>= nticks ticks n)))))
+    100   200 20
+    100   20  5
+    1000  200 5 ))
 
 
 (deftest test-tick-by
