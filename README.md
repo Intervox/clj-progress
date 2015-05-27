@@ -8,7 +8,7 @@
 
   [repo_badge]: https://img.shields.io/clojars/v/intervox/clj-progress.svg
   [travis_badge]: https://img.shields.io/travis/Intervox/clj-progress.svg?label=linux%20build
-  [appveyor_badge]: https://img.shields.io/appveyor/ci/Intervox/clj-progress.svg?label=windows%20build
+  [appveyor_badge]: https://img.shields.io/appveyor/ci/lbeschastny/clj-progress.svg?label=windows%20build
   [versioneye_badge]: http://www.versioneye.com/clojure/intervox:clj-progress/badge.svg
   [travis]: https://travis-ci.org/Intervox/clj-progress
   [versioneye]: http://www.versioneye.com/clojure/intervox:clj-progress
