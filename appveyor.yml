@@ -1,0 +1,17 @@
+init:
+- ps: cinst jdk8
+- ps: >-
+    $base = "https://raw.githubusercontent.com/technomancy/leiningen/"
+
+    $lein = $base + "stable/bin/lein.bat"
+
+    (new-object net.webclient).DownloadFile($lein, 'lein.bat')
+- lein self-install
+
+install:
+- lein deps
+
+test_script:
+- lein test
+
+build: off
