@@ -1,4 +1,10 @@
-# clj-progress [![Clojars Repository][repo_badge]][repo] [![Linux Build Status][travis_badge]][travis] [![Windows Build Status][appveyor_badge]][appveyor] [![Dependency Status][versioneye_badge]][versioneye]
+# clj-progress
+
+<!-- badges -->
+[![Clojars Repository][repo_badge]][repo]
+[![Linux Build Status][travis_badge]][travis]
+[![Windows Build Status][appveyor_badge]][appveyor]
+[![Dependency Status][versioneye_badge]][versioneye]
 
   [repo_badge]: https://img.shields.io/clojars/v/intervox/clj-progress.svg
   [travis_badge]: https://img.shields.io/travis/Intervox/clj-progress.svg?label=linux%20build
