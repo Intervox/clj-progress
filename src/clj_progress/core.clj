@@ -39,7 +39,7 @@
 
 (defn re-init
   [ttl]
-  (swap! *progress-state* update-in [:ttl] ttl)
+  (swap! *progress-state* assoc-in [:ttl] ttl)
   (handle :tick))
 
 (defn- tick* [obj]
