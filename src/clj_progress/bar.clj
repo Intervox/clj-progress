@@ -60,6 +60,7 @@
         :total    (if ttl? ttl "?")
         :elapsed  (long elapsed)
         :eta      (cond
+                    (zero? done) "?"
                     done? 0
                     ttl?  (calc-eta ttl done elapsed)
                     :else "?")
