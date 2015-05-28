@@ -81,6 +81,31 @@
         (= @c 2)))))
 
 
+(deftest test-init
+  (binding [*progress-state*   (atom {})
+            *progress-handler* {}]
+    (init 123)
+    (are [n]
+      (do
+        (re-init n)
+        (let [{:keys [ttl done]} @*progress-state*]
+          (and  (= n  ttl)
+                (= 0  done))))
+      123
+      321
+      42))
+  (is
+    (let [c (atom 0)]
+      (binding [*progress-handler* {:init (ainc c)}
+                *progress-state*   (atom {})]
+        (init 123)
+        (re-init 456)
+        (re-init 42)
+        (let [{:keys [ttl]} @*progress-state*]
+          (and  (= 1  @c)
+                (= 42 ttl)))))))
+
+
 (deftest test-tick
   (are [h nticks n args]
     (let [c (atom 0)]
