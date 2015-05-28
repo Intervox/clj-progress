@@ -31,7 +31,8 @@
     [     [2]     ]
     [     (list 2)]
     [     #{2}    ]
-    [     {:q 2}  ]))
+    [     {:q 2}  ]
+    [     (range 7)]))
 
 
 (deftest test-init
@@ -186,15 +187,25 @@
                                     :done (ainc c3) }
               *progress-state*    (atom {})]
       (with-throttle 0
+        (->> (range 25)
+             (init "Processing")
+             (map tick)
+             dorun
+             done))
+      (is (= @*progress-state* {}))
+      (is (= @c1 1 ))
+      (is (= @c2 25))
+      (is (= @c3 1 ))
+      (with-throttle 0
         (->> (range 50)
              (init "Processing")
              (map tick)
              done
              dorun))
       (is (= @*progress-state* {}))
-      (is (= @c1 1 ))
-      (is (= @c2 50))
-      (is (= @c3 1 )))))
+      (is (= @c1 2 ))
+      (is (= @c2 75))
+      (is (= @c3 2 )))))
 
 
 (deftest test-hooks
