@@ -1,3 +1,13 @@
+0.2.1 / 2015-05-28
+==================
+
+  * Improved `done` behaviour with lazy sequences [#6]
+  * Fixed broken `re-init` function [#7]
+
+
+  [#6]: https://github.com/Intervox/clj-progress/pull/6
+  [#7]: https://github.com/Intervox/clj-progress/pull/5
+
 0.2.0 / 2015-03-27
 ==================
 
