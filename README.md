@@ -68,6 +68,8 @@ When the third argument is provided, `init` returns it.
 
 `tick` and `done` takes no arguments, returning the first argument if any provided.
 
+If the first argument to `done` is an unrealized lazy sequence, then `done` will return new lazy sequence which will automatically call `done` function upon its realization.
+
 ### Examples
 
 ```Clojure
@@ -109,16 +111,17 @@ Processing lazy sequences with progress:
         done))
 ```
 
-Note that `done` should only be called after the lazy sequence is evaluated.
-It resets the state of the progress bar, making later `tick` calls illegal.
-Evaluate lazy sequences before calling `done`:
+Calling `done` with unrealized lazy sequence:
 
 ```Clojure
-(->> (range 1 50)
-     (init "Processing")
-     (map (comp tick process-item))
-     doall
-     done)
+(defn very-lazy []
+  (let [s (->>  (iterate inc 0)
+                (init "Processing" 50)
+                (map (comp tick process-item))
+                (take 50)
+                done)]
+    (println "Nothing happened yet")
+    (reduce + s)))
 ```
 
 ## Other ticking methods

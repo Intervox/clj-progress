@@ -68,10 +68,16 @@
   (swap! *progress-state* assoc-in [:done] x)
   (tick* obj))
 
-(defn done [& [obj]]
+(defn done* [obj]
   (handle :done)
   (reset! *progress-state* {})
   obj)
+
+(defn done [& [obj]]
+  (if (and (instance? clojure.lang.LazySeq obj)
+           (not (realized? obj)))
+      (lazy-cat obj (done* nil))
+      (done* obj)))
 
 (defmacro with-progress [& body]
   "Executes body incapsulating its progress"

@@ -3,6 +3,11 @@
         clojure.test))
 
 
+(defn ainc
+  [^clojure.lang.Atom a]
+  (fn [_] (swap! a inc)))
+
+
 (deftest test-returned-value
   (are [args]
     (binding [*progress-handler* {}]
@@ -26,7 +31,8 @@
     [     [2]     ]
     [     (list 2)]
     [     #{2}    ]
-    [     {:q 2}  ]))
+    [     {:q 2}  ]
+    [     (range 7)]))
 
 
 (deftest test-init
@@ -69,7 +75,7 @@
     ["baz"   {:q 2}  ]  1)
   (is
     (let [c (atom 0)]
-      (binding [*progress-handler* {:init (fn [_] (swap! c inc))}]
+      (binding [*progress-handler* {:init (ainc c)}]
         (init 123)
         (init 456)
         (= @c 2)))))
@@ -78,7 +84,7 @@
 (deftest test-tick
   (are [h nticks n args]
     (let [c (atom 0)]
-      (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
+      (binding [*progress-handler*  {:tick (ainc c)}
                 *progress-state*    (atom {})]
         (init h n)
         (with-throttle 0
@@ -100,7 +106,7 @@
                   (* sleep)
                   (/ throttle)
                   int)]
-      (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
+      (binding [*progress-handler*  {:tick (ainc c)}
                 *progress-state*    (atom {})
                 *throttle*          throttle]
         (init n)
@@ -118,7 +124,7 @@
 (deftest test-tick-by
   (are [h bys n args res]
     (let [c (atom 0)]
-      (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
+      (binding [*progress-handler*  {:tick (ainc c)}
                 *progress-state*    (atom {})]
         (init h n)
         (with-throttle 0
@@ -140,7 +146,7 @@
 (deftest test-tick-to
   (are [h tos n args res]
     (let [c (atom 0)]
-      (binding [*progress-handler*  {:tick (fn [_] (swap! c inc))}
+      (binding [*progress-handler*  {:tick (ainc c)}
                 *progress-state*    (atom {})]
         (init h n)
         (with-throttle 0
@@ -161,7 +167,7 @@
 (deftest test-done
   (are [args]
     (let [c (atom 0)]
-      (binding [*progress-handler*  {:done (fn [_] (swap! c inc))}
+      (binding [*progress-handler*  {:done (ainc c)}
                 *progress-state*    (atom {})]
         (init "foo" 10)
         (tick)
@@ -170,6 +176,36 @@
               (= @c 1))))
     [3]
     [ ]))
+
+
+(deftest test-lazy
+  (let [c1 (atom 0)
+        c2 (atom 0)
+        c3 (atom 0)]
+    (binding [*progress-handler*  { :init (ainc c1)
+                                    :tick (ainc c2)
+                                    :done (ainc c3) }
+              *progress-state*    (atom {})]
+      (with-throttle 0
+        (->> (range 25)
+             (init "Processing")
+             (map tick)
+             dorun
+             done))
+      (is (= @*progress-state* {}))
+      (is (= @c1 1 ))
+      (is (= @c2 25))
+      (is (= @c3 1 ))
+      (with-throttle 0
+        (->> (range 50)
+             (init "Processing")
+             (map tick)
+             done
+             dorun))
+      (is (= @*progress-state* {}))
+      (is (= @c1 2 ))
+      (is (= @c2 75))
+      (is (= @c3 2 )))))
 
 
 (deftest test-hooks
