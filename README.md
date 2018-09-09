@@ -247,7 +247,7 @@ Any non-positive value will completely disable throttling.
 
 ## Using custom progress handlers
 
-`clj-proggress` allows you to use your own progress handler by defining `:init`, `:tick` and `:done` hooks with `set-progress-handler!` method or `with-progress-handler` macro:
+`clj-progress` allows you to use your own progress handler by defining `:init`, `:tick` and `:done` hooks with `set-progress-handler!` method or `with-progress-handler` macro:
 
 ```Clojure
 (set-progress-handler!
