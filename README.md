@@ -234,12 +234,12 @@ Indeterminable state also change `:bar` animation.
 `clj-progress` will execute `:tick` progress handler (reprint progress bar, or invoke user-defined handler) as soon as you'll call any `tick` method for the first time.
 If you'll call it again any number of times during the wait period, `:tick` progress handler will not be executed, though progress status will be tracked internally.
 
-You could change default behavior using `set-throttling!` function and `with-throttling` macro:
+You could change default behavior using `set-throttle!` function and `with-throttle` macro:
 
 ```Clojure
-(set-throttling! wait-time-in-milliseconds)
+(set-throttle! wait-time-in-milliseconds)
 
-(with-throttling wait-time-in-milliseconds
+(with-throttle wait-time-in-milliseconds
   (do-something))
 ```
 
